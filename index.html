@@ -1,18 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Welcome to SluGurMan's Site</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Practice Website - Scroll & Links</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #fafafa;
+      color: #333;
+    }
+
+    header {
+      background: #007bff;
+      color: white;
+      padding: 1rem;
       text-align: center;
-      margin-top: 50px;
-      background-color: #f5f5f5;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .image-text {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .image-text img {
+      max-width: 300px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .image-text div {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .buttons {
+      margin-top: 1rem;
+    }
+
+    .buttons a {
+      display: inline-block;
+      text-decoration: none;
+      background: #007bff;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      margin-right: 1rem;
+      transition: background 0.3s;
+    }
+
+    .buttons a:hover {
+      background: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <h1>Hello from GitHub Pages!</h1>
-  <p>This is a practice site for learning web development.</p>
+
+  <header>
+    <h1>Welcome to My Practice Website</h1>
+  </header>
+
+  <section>
+    <h2>About This Site</h2>
+    <p>This site is a place where I practice building websites with HTML, CSS, and links.</p>
+  </section>
+
+  <section class="image-text">
+    <img src="https://via.placeholder.com/300x200.png?text=Sample+Image" alt="Sample Image" />
+    <div>
+      <h2>Image with Text</h2>
+      <p>This block shows how you can put an image alongside some text. You can replace the image URL with your own pictures easily.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links and Buttons</h2>
+    <p>Here are some clickable links you can practice with:</p>
+    <div class="buttons">
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="page2.html">Another Page</a>
+      <a href="#about-section">Scroll to About</a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 SluGurMan. Code licensed under MIT.
+  </footer>
+
 </body>
 </html>
