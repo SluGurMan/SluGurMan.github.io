@@ -1,13 +1,13 @@
 // Supabase Configuration
-const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_URL = 'https://ccpyrrvicpklepidtilo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjcHlycnZpY3BrbGVwaWR0aWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3OTI5NTcsImV4cCI6MjA3MDM2ODk1N30.BIsUcuDylm0x7DO32YJ87TuVm6oP2zysEQSCjM-X18s';
 
 // Discord Configuration
 const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID_HERE';
 const DISCORD_CLIENT_SECRET = 'YOUR_DISCORD_CLIENT_SECRET_HERE';
 
 // Admin Configuration
-const ADMIN_DISCORD_ID = 'YOUR_DISCORD_ID_HERE'; // Your Discord ID for admin access
+const ADMIN_DISCORD_ID = '821445289477931069'; // Your Discord ID for admin access
 
 // Default Services (will be loaded from database, but these are fallbacks)
 const DEFAULT_SERVICES = [
@@ -21,7 +21,7 @@ const DEFAULT_SERVICES = [
         name: 'UHS',
         discord_role: '@UHS',
         webhook_url: '',
-        description: 'University Health Services'
+        description: 'Unmatched Health Services'
     },
     {
         name: 'Fire',
