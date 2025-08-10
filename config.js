@@ -3,8 +3,8 @@ const SUPABASE_URL = 'https://ccpyrrvicpklepidtilo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjcHlycnZpY3BrbGVwaWR0aWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3OTI5NTcsImV4cCI6MjA3MDM2ODk1N30.BIsUcuDylm0x7DO32YJ87TuVm6oP2zysEQSCjM-X18s';
 
 // Discord Configuration
-const DISCORD_CLIENT_ID = '1054937540651647066';
-const DISCORD_CLIENT_SECRET = 'PsHIfZnoWvyg7DzBWIwKpXtwuVGGF2sa';
+const DISCORD_CLIENT_ID = 'SluGurMan Project';
+const DISCORD_CLIENT_SECRET = 'jH50Npqvzv2TBVJU';
 
 // Admin Configuration
 const ADMIN_DISCORD_ID = '821445289477931069'; // Your Discord ID for admin access
