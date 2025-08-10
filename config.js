@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Discord Configuration
 const DISCORD_CLIENT_ID = 'SluGurMan Project';
-const DISCORD_CLIENT_SECRET = 'jH50Npqvzv2TBVJU';
+const DISCORD_CLIENT_SECRET = '';
 
 // Admin Configuration
 const ADMIN_DISCORD_ID = '821445289477931069'; // Your Discord ID for admin access
