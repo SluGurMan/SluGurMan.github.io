@@ -74,8 +74,8 @@ class AuthManager {
     }
 
     hasPermission(permission) {
-        return this.userPermissions.includes(permission) || 
-               this.userPermissions.includes('admin_panel'); // Admin has all permissions
+        return this.userPermissions.includes(permission) ||
+               this.userPermissions.includes(PERMISSIONS.ADMIN_PANEL); // Admin has all permissions
     }
 
     isAdmin() {
@@ -85,22 +85,33 @@ class AuthManager {
 
     updateUI() {
         const userInfo = document.getElementById('userInfo');
-        if (userInfo && this.currentUser) {
-            const username = this.currentUser.user_metadata?.full_name || 
-                           this.currentUser.user_metadata?.name || 
-                           'User';
-            userInfo.textContent = `Welcome, ${username}`;
-        }
-
-        // Show/hide admin controls based on permissions
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
         const adminControls = document.getElementById('adminControls');
-        if (adminControls) {
-            adminControls.style.display = this.hasPermission(PERMISSIONS.VIEW_TICKETS) ? 'flex' : 'none';
+
+        if (this.currentUser) {
+            const username = this.currentUser.user_metadata?.full_name ||
+                             this.currentUser.user_metadata?.name ||
+                             'User';
+            if (userInfo) userInfo.textContent = `Welcome, ${username}`;
+
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+
+            if (adminControls) {
+                adminControls.style.display = this.hasPermission(PERMISSIONS.VIEW_TICKETS) ? 'flex' : 'none';
+            }
+        } else {
+            if (userInfo) userInfo.textContent = '';
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+            if (adminControls) adminControls.style.display = 'none';
         }
     }
 
     redirectToLogin() {
-        if (window.location.pathname !== '/auth.html') {
+        const currentPath = window.location.pathname.split('/').pop();
+        if (currentPath !== 'auth.html') {
             window.location.href = 'auth.html';
         }
     }
@@ -110,9 +121,8 @@ class AuthManager {
             await this.supabase.auth.signOut();
         } catch (error) {
             console.error('Logout error:', error);
-            // Force redirect even if logout fails
-            window.location.href = 'auth.html';
         }
+        window.location.href = 'auth.html';
     }
 
     checkPageAccess(requiredPermission) {
@@ -131,9 +141,9 @@ class AuthManager {
 
     showAccessDenied() {
         const accessDenied = document.getElementById('accessDenied');
-        const mainContent = document.getElementById('adminContent') || 
-                          document.getElementById('ticketsContent');
-        
+        const mainContent = document.getElementById('adminContent') ||
+                            document.getElementById('ticketsContent');
+
         if (accessDenied) accessDenied.classList.remove('hidden');
         if (mainContent) mainContent.style.display = 'none';
     }
@@ -145,16 +155,26 @@ let authManager;
 // Initialize auth when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     authManager = new AuthManager();
+
+    // Hook up login button if on index.html
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            await authManager.supabase.auth.signInWithOAuth({
+                provider: 'discord',
+                options: { redirectTo: `${window.location.origin}/index.html` }
+            });
+        });
+    }
+
+    // Hook up logout button
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => authManager.logout());
+    }
 });
 
-// Global logout function
-async function logout() {
-    if (authManager) {
-        await authManager.logout();
-    }
-}
-
-// Utility functions for checking permissions
+// Utility functions
 function hasPermission(permission) {
     return authManager ? authManager.hasPermission(permission) : false;
 }
