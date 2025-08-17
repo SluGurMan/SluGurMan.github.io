@@ -143,6 +143,20 @@
             background: #ff5252;
         }
 
+        /* Debug info */
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            max-width: 300px;
+            z-index: 9999;
+        }
+
         /* Page Content */
         .page {
             display: none;
@@ -509,10 +523,23 @@
             .chat-input-container {
                 flex-direction: column;
             }
+
+            .debug-info {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 1rem 0;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Debug Info -->
+    <div id="debugInfo" class="debug-info">
+        <strong>Debug Info:</strong><br>
+        <div id="debugContent">Loading...</div>
+    </div>
+
     <header>
         <div class="container">
             <div class="header-content">
@@ -652,14 +679,22 @@
         let supabase;
         let currentUser = null;
         
-        // REPLACE THESE WITH YOUR ACTUAL SUPABASE VALUES
+        // Your Supabase configuration
         const SUPABASE_URL = 'https://ccpyrrvicpklepidtilo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjcHlycnZpY3BrbGVwaWR0aWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3OTI5NTcsImV4cCI6MjA3MDM2ODk1N30.BIsUcuDylm0x7DO32YJ87TuVm6oP2zysEQSCjM-X18s';
         
-        // YOUR DISCORD USER ID (get from Discord Developer settings)
+        // YOUR DISCORD USER ID
         const OWNER_DISCORD_ID = '821445289477931069';
 
-        // Navigation functionality (back to simple working version)
+        // Debug function
+        function updateDebugInfo(info) {
+            const debugContent = document.getElementById('debugContent');
+            if (debugContent) {
+                debugContent.innerHTML = info;
+            }
+        }
+
+        // Navigation functionality
         function showPage(pageId) {
             // Hide all pages
             const pages = document.querySelectorAll('.page');
@@ -687,17 +722,23 @@
 
         // Initialize Supabase
         function initSupabase() {
-            if (SUPABASE_URL === 'https://ccpyrrvicpklepidtilo.supabase.co') {
-                console.log('Supabase not configured yet');
-                return;
-            }
+            updateDebugInfo('Initializing Supabase...');
             
             try {
-                supabase = supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                // Check if supabase is available
+                if (typeof window.supabase === 'undefined') {
+                    updateDebugInfo('❌ Supabase library not loaded');
+                    return;
+                }
+                
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                updateDebugInfo('✅ Supabase initialized successfully');
+                
                 checkAuthState();
                 loadUpdates();
             } catch (error) {
                 console.error('Supabase initialization error:', error);
+                updateDebugInfo(`❌ Supabase init error: ${error.message}`);
             }
         }
 
@@ -705,8 +746,11 @@
         async function loginWithDiscord() {
             if (!supabase) {
                 alert('Authentication service not configured');
+                updateDebugInfo('❌ No Supabase instance');
                 return;
             }
+            
+            updateDebugInfo('🔄 Attempting Discord login...');
             
             try {
                 const { data, error } = await supabase.auth.signInWithOAuth({
@@ -716,9 +760,16 @@
                     }
                 });
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('Discord login error:', error);
+                    updateDebugInfo(`❌ Discord login error: ${error.message}`);
+                    alert(`Login failed: ${error.message}`);
+                } else {
+                    updateDebugInfo('✅ Discord login initiated');
+                }
             } catch (error) {
                 console.error('Login error:', error);
+                updateDebugInfo(`❌ Login catch error: ${error.message}`);
                 alert('Login failed. Please try again.');
             }
         }
@@ -732,8 +783,10 @@
                 
                 currentUser = null;
                 updateUI();
+                updateDebugInfo('✅ Logged out successfully');
             } catch (error) {
                 console.error('Logout error:', error);
+                updateDebugInfo(`❌ Logout error: ${error.message}`);
             }
         }
 
@@ -741,20 +794,39 @@
             if (!supabase) return;
             
             try {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error) {
+                    console.error('Auth check error:', error);
+                    updateDebugInfo(`❌ Auth check error: ${error.message}`);
+                    return;
+                }
+                
                 currentUser = user;
                 updateUI();
                 
+                if (user) {
+                    updateDebugInfo(`✅ User logged in: ${user.user_metadata?.full_name || 'Unknown'}<br>ID: ${user.user_metadata?.provider_id || 'No ID'}`);
+                } else {
+                    updateDebugInfo('ℹ️ No user logged in');
+                }
+                
                 // Listen for auth changes
                 supabase.auth.onAuthStateChange((event, session) => {
+                    console.log('Auth state changed:', event, session);
                     currentUser = session?.user || null;
                     updateUI();
+                    
                     if (event === 'SIGNED_IN') {
+                        updateDebugInfo(`✅ Signed in: ${session.user.user_metadata?.full_name || 'Unknown'}`);
                         loadMessages();
+                    } else if (event === 'SIGNED_OUT') {
+                        updateDebugInfo('ℹ️ Signed out');
                     }
                 });
             } catch (error) {
                 console.error('Auth check error:', error);
+                updateDebugInfo(`❌ Auth check catch error: ${error.message}`);
             }
         }
 
@@ -773,8 +845,12 @@
                 document.getElementById('userAvatar').src = currentUser.user_metadata?.avatar_url || '';
                 document.getElementById('username').textContent = currentUser.user_metadata?.full_name || 'User';
                 
-                // Check if user is owner
-                const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+                // Check if user is owner - try multiple possible fields
+                const discordId = currentUser.user_metadata?.provider_id || 
+                                 currentUser.user_metadata?.sub || 
+                                 currentUser.user_metadata?.id;
+                
+                const isOwner = discordId === OWNER_DISCORD_ID;
                 addUpdateBtn.disabled = !isOwner;
                 addUpdateBtn.textContent = isOwner ? '+ Add Update' : '+ Add Update (Owner Only)';
                 
@@ -810,6 +886,7 @@
                 
                 if (error && error.code !== 'PGRST116') {
                     console.error('Error loading updates:', error);
+                    updateDebugInfo(`❌ Updates load error: ${error.message}`);
                     return;
                 }
                 
@@ -821,11 +898,14 @@
                         const updateElement = createUpdateElement(update.content, update.created_at);
                         container.appendChild(updateElement);
                     });
+                    updateDebugInfo(`✅ Loaded ${updates.length} updates`);
+                } else {
+                    updateDebugInfo('ℹ️ No database updates, showing default');
                 }
-                // Keep default update if no database updates
                 
             } catch (error) {
                 console.error('Load updates error:', error);
+                updateDebugInfo(`❌ Updates catch error: ${error.message}`);
             }
         }
 
@@ -853,7 +933,12 @@
                 return;
             }
             
-            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            // Check if user is owner - try multiple possible fields
+            const discordId = currentUser.user_metadata?.provider_id || 
+                             currentUser.user_metadata?.sub || 
+                             currentUser.user_metadata?.id;
+            
+            const isOwner = discordId === OWNER_DISCORD_ID;
             if (!isOwner) {
                 alert('Only the owner can add updates');
                 return;
@@ -879,8 +964,10 @@
                 
                 closeUpdateModal();
                 loadUpdates();
+                updateDebugInfo('✅ Update saved successfully');
             } catch (error) {
                 console.error('Save update error:', error);
+                updateDebugInfo(`❌ Save update error: ${error.message}`);
                 alert('Failed to save update. Please try again.');
             }
         }
@@ -898,6 +985,7 @@
                 
                 if (error && error.code !== 'PGRST116') {
                     console.error('Error loading messages:', error);
+                    updateDebugInfo(`❌ Messages load error: ${error.message}`);
                     return;
                 }
                 
@@ -911,9 +999,13 @@
                     });
                     
                     container.scrollTop = container.scrollHeight;
+                    updateDebugInfo(`✅ Loaded ${messages.length} messages`);
+                } else {
+                    updateDebugInfo('ℹ️ No messages in chat');
                 }
             } catch (error) {
                 console.error('Load messages error:', error);
+                updateDebugInfo(`❌ Messages catch error: ${error.message}`);
             }
         }
 
@@ -963,8 +1055,10 @@
                 
                 input.value = '';
                 loadMessages();
+                updateDebugInfo('✅ Message sent');
             } catch (error) {
                 console.error('Send message error:', error);
+                updateDebugInfo(`❌ Send message error: ${error.message}`);
                 alert('Failed to send message. Please try again.');
             }
         }
@@ -976,7 +1070,12 @@
                 return;
             }
             
-            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            // Check if user is owner - try multiple possible fields
+            const discordId = currentUser.user_metadata?.provider_id || 
+                             currentUser.user_metadata?.sub || 
+                             currentUser.user_metadata?.id;
+            
+            const isOwner = discordId === OWNER_DISCORD_ID;
             if (!isOwner) {
                 alert('Only the owner can add updates');
                 return;
@@ -1013,8 +1112,11 @@
 
         // Initialize everything when page loads
         window.onload = function() {
-            initSupabase();
-            updateUI(); // Update UI even if Supabase isn't configured
+            updateDebugInfo('🔄 Page loading...');
+            setTimeout(() => {
+                initSupabase();
+                updateUI();
+            }, 100);
         }
     </script>
 </body>
