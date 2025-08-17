@@ -3,140 +3,999 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergency Services Portal</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="styles.css">
+    <title>SluGurMan - Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.7/supabase.min.js"></script>
     <style>
-        /* --- Your Existing Styles (unchanged) --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
+            min-height: 100vh;
+            color: white;
         }
-        .header { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; align-items: center; }
-        .user-info { color: white; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .user-info img { width: 32px; height: 32px; border-radius: 50%; }
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2); color: white; border: none;
-            padding: 8px 16px; border-radius: 5px; cursor: pointer; transition: background 0.3s;
-        }
-        .logout-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
         .container {
-            text-align: center; background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); border-radius: 20px; padding: 40px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        h1 { color: white; margin-bottom: 40px; font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
-        .buttons-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; }
-        .service-btn {
-            background: rgba(255, 255, 255, 0.2); color: white; border: none;
-            padding: 20px; border-radius: 15px; font-size: 1.2rem; font-weight: bold;
-            cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+
+        /* Header Styles */
+        header {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .service-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
-        .admin-controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; }
-        .admin-btn {
-            background: rgba(255, 0, 0, 0.7); color: white; border: none;
-            padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 0.9rem;
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        .admin-btn:hover { background: rgba(255, 0, 0, 0.9); }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-        .modal-content { background: white; margin: 15% auto; padding: 20px; border-radius: 10px; width: 80%; max-width: 500px; }
-        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close:hover { color: black; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
-        .submit-btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .submit-btn:hover { background: #0056b3; }
-        .hidden { display: none; }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+        }
+
+        /* Auth Section */
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .login-btn {
+            background: #5865F2;
+            border: none;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Home Page Styles */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        /* Updates Section */
+        .updates-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .updates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .updates-title {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .add-update-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-update-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .add-update-btn:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .update-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4ecdc4;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .update-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .update-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Social Links */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .social-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .social-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chat Room Styles */
+        .chat-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .chat-message {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-avatar {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+
+        .message-username {
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .message-timestamp {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .message-content {
+            padding-left: 2rem;
+        }
+
+        .chat-input-section {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 3rem;
+            opacity: 0.7;
+        }
+
+        /* Modal for adding updates */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .modal textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="user-info" id="userInfo"></div>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
-    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">SluGurMan</div>
+                <div class="nav-section">
+                    <nav>
+                        <button class="nav-btn active" onclick="showPage('home')">Home</button>
+                        <button class="nav-btn" onclick="showPage('socials')">Socials</button>
+                        <button class="nav-btn" onclick="showPage('chat')">Chat</button>
+                        <a href="https://discord.gg/FQc3HN6mwh" class="nav-btn" target="_blank">Discord</a>
+                    </nav>
+                    <div class="auth-section">
+                        <div id="userInfo" class="user-info" style="display: none;">
+                            <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                            <span id="username"></span>
+                            <button class="logout-btn" onclick="logout()">Logout</button>
+                        </div>
+                        <button id="loginBtn" class="login-btn" onclick="loginWithDiscord()">
+                            🎮 Login with Discord
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Emergency Services Portal</h1>
-        <div class="buttons-container" id="buttonsContainer">
-            <!-- Service buttons populated by JS -->
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Welcome to SluGurMan</h1>
+                <p>Content Creator | Streamer | Community Builder</p>
+            </div>
+            
+            <div class="updates-section">
+                <div class="updates-header">
+                    <h2 class="updates-title">Latest Updates</h2>
+                    <button id="addUpdateBtn" class="add-update-btn" onclick="openUpdateModal()" disabled>
+                        + Add Update (Owner Only)
+                    </button>
+                </div>
+                
+                <div id="updates-container">
+                    <!-- Updates will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Socials Page -->
+        <div id="socials" class="page">
+            <h1 class="page-title">Find Me Online</h1>
+            
+            <div class="social-grid">
+                <div class="social-card">
+                    <div class="social-icon">📺</div>
+                    <h3>Twitch</h3>
+                    <p>Watch me stream live!</p>
+                    <a href="https://twitch.tv/SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">🎵</div>
+                    <h3>TikTok</h3>
+                    <p>Short form content and highlights</p>
+                    <a href="https://tiktok.com/@SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">📸</div>
+                    <h3>Instagram</h3>
+                    <p>Behind the scenes content</p>
+                    <a href="https://instagram.com/SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">🎬</div>
+                    <h3>YouTube</h3>
+                    <p>Videos and highlights</p>
+                    <a href="https://youtube.com/@SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">💬</div>
+                    <h3>Discord</h3>
+                    <p>Join the community!</p>
+                    <a href="https://discord.gg/FQc3HN6mwh" class="social-link" target="_blank">Join Server</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="chat" class="page">
+            <h1 class="page-title">Community Chat</h1>
+            
+            <div id="chatContainer" class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <!-- Messages will appear here -->
+                </div>
+                
+                <div id="chatInputSection" class="chat-input-section" style="display: none;">
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." maxlength="500">
+                        <button class="send-btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+                
+                <div id="loginRequired" class="login-required">
+                    <h3>Login Required</h3>
+                    <p>Please login with Discord to join the chat!</p>
+                    <button class="login-btn" onclick="loginWithDiscord()" style="margin-top: 1rem;">
+                        🎮 Login with Discord
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="admin-controls hidden" id="adminControls">
-        <button class="admin-btn" onclick="openTicketModal()">Create Ticket</button>
-        <button class="admin-btn" onclick="window.location.href='tickets.html'">View Tickets</button>
-        <button class="admin-btn" onclick="window.location.href='admin.html'">Admin Panel</button>
-    </div>
-    
-    <!-- Ticket Modal -->
-    <div id="ticketModal" class="modal">
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeTicketModal()">&times;</span>
-            <h2>Create Emergency Ticket</h2>
-            <form id="ticketForm">
-                <div class="form-group">
-                    <label for="serviceType">Service Type:</label>
-                    <select id="serviceType" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <input type="text" id="description" required placeholder="Brief description of emergency">
-                </div>
-                <div class="form-group">
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" required placeholder="Address or location">
-                </div>
-                <div class="form-group">
-                    <label for="priority">Priority:</label>
-                    <select id="priority" required>
-                        <option value="">Select Priority</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="critical">Critical</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">Create Ticket</button>
-            </form>
+            <h2 style="margin-bottom: 1rem; text-align: center;">Add New Update</h2>
+            <input type="text" id="updateTitle" placeholder="Update title (optional)">
+            <textarea id="updateContent" placeholder="What's new?"></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" onclick="closeUpdateModal()">Cancel</button>
+                <button class="modal-btn save-btn" onclick="saveUpdate()">Save Update</button>
+            </div>
         </div>
     </div>
-    
-    <script src="config.js"></script>
+
     <script>
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase Configuration
+        let supabase;
+        let currentUser = null;
+        
+        // REPLACE THESE WITH YOUR ACTUAL SUPABASE VALUES
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+        
+        // YOUR DISCORD USER ID (get from Discord Developer settings)
+        const OWNER_DISCORD_ID = 'YOUR_DISCORD_USER_ID_HERE';
 
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                window.location.href = "auth.html";
-                return;
-            }
-
-            const user = session.user;
-            const discordData = user.user_metadata;
-            document.getElementById("userInfo").innerHTML = `
-                <img src="https://cdn.discordapp.com/avatars/${discordData.provider_id}/${discordData.avatar}.png" alt="Avatar">
-                ${discordData.full_name}
-            `;
-
-            if (discordData.provider_id === ADMIN_DISCORD_ID) {
-                document.getElementById("adminControls").classList.remove("hidden");
+        // Initialize Supabase
+        function initSupabase() {
+            try {
+                supabase = supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                checkAuthState();
+                loadUpdates();
+                loadMessages();
+            } catch (error) {
+                console.error('Supabase initialization error:', error);
+                // Show fallback UI or error message
             }
         }
 
-        document.getElementById("logoutBtn").addEventListener("click", async () => {
-            await supabaseClient.auth.signOut();
-            window.location.href = "auth.html";
+        // Auth Functions
+        async function loginWithDiscord() {
+            if (!supabase) {
+                alert('Authentication service not available');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'discord',
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+                
+                if (error) throw error;
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+
+        async function logout() {
+            if (!supabase) return;
+            
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                currentUser = null;
+                updateUI();
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        async function checkAuthState() {
+            if (!supabase) return;
+            
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                currentUser = user;
+                updateUI();
+                
+                // Listen for auth changes
+                supabase.auth.onAuthStateChange((event, session) => {
+                    currentUser = session?.user || null;
+                    updateUI();
+                    if (event === 'SIGNED_IN') {
+                        loadMessages();
+                    }
+                });
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        function updateUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const userInfo = document.getElementById('userInfo');
+            const addUpdateBtn = document.getElementById('addUpdateBtn');
+            const chatInputSection = document.getElementById('chatInputSection');
+            const loginRequired = document.getElementById('loginRequired');
+
+            if (currentUser) {
+                // User is logged in
+                loginBtn.style.display = 'none';
+                userInfo.style.display = 'flex';
+                
+                document.getElementById('userAvatar').src = currentUser.user_metadata?.avatar_url || '';
+                document.getElementById('username').textContent = currentUser.user_metadata?.full_name || 'User';
+                
+                // Check if user is owner
+                const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add updates');
+                return;
+            }
+            
+            document.getElementById('updateModal').style.display = 'block';
+        }
+
+        function closeUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+            document.getElementById('updateTitle').value = '';
+            document.getElementById('updateContent').value = '';
+        }
+
+        // Enter key listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
         });
 
-        checkAuth();
-    </script>
-    <script src="main.js"></script>
-</body>
-</html>
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('updateModal');
+            if (event.target === modal) {
+                closeUpdateModal();
+            }
+        }
+
+        // Initialize everything when page loads
+        window.onload = function() {
+            initSupabase();
+        }_ID;
+                addUpdateBtn.disabled = !isOwner;
+                addUpdateBtn.textContent = isOwner ? '+ Add Update' : '+ Add Update (Owner Only)';
+                
+                // Show chat input
+                chatInputSection.style.display = 'block';
+                loginRequired.style.display = 'none';
+            } else {
+                // User is not logged in
+                loginBtn.style.display = 'block';
+                userInfo.style.display = 'none';
+                addUpdateBtn.disabled = true;
+                addUpdateBtn.textContent = '+ Add Update (Owner Only)';
+                
+                // Hide chat input
+                chatInputSection.style.display = 'none';
+                loginRequired.style.display = 'block';
+            }
+        }
+
+        // Navigation functionality
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (pageId === 'chat') {
+                loadMessages();
+            }
+        }
+
+        // Update functionality
+        async function loadUpdates() {
+            if (!supabase) return;
+            
+            try {
+                const { data: updates, error } = await supabase
+                    .from('updates')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading updates:', error);
+                    return;
+                }
+                
+                const container = document.getElementById('updates-container');
+                container.innerHTML = '';
+                
+                if (updates && updates.length > 0) {
+                    updates.forEach(update => {
+                        const updateElement = createUpdateElement(update.content, update.created_at);
+                        container.appendChild(updateElement);
+                    });
+                } else {
+                    // Default update if no updates in database
+                    const defaultUpdate = createUpdateElement(
+                        'Welcome to my new portfolio website! Thanks for checking it out. More updates coming soon!',
+                        new Date().toISOString()
+                    );
+                    container.appendChild(defaultUpdate);
+                }
+            } catch (error) {
+                console.error('Load updates error:', error);
+            }
+        }
+
+        function createUpdateElement(content, timestamp) {
+            const updateItem = document.createElement('div');
+            updateItem.className = 'update-item';
+            
+            const date = new Date(timestamp).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            updateItem.innerHTML = `
+                <div class="update-date">${date}</div>
+                <div class="update-content">${content}</div>
+            `;
+            
+            return updateItem;
+        }
+
+        async function saveUpdate() {
+            if (!currentUser || !supabase) {
+                alert('Please login to add updates');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add updates');
+                return;
+            }
+            
+            const content = document.getElementById('updateContent').value;
+            if (!content.trim()) {
+                alert('Please enter some content for your update!');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('updates')
+                    .insert([
+                        {
+                            content: content.trim(),
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                closeUpdateModal();
+                loadUpdates();
+            } catch (error) {
+                console.error('Save update error:', error);
+                alert('Failed to save update. Please try again.');
+            }
+        }
+
+        // Chat functionality
+        async function loadMessages() {
+            if (!supabase) return;
+            
+            try {
+                const { data: messages, error } = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .order('created_at', { ascending: true })
+                    .limit(50);
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading messages:', error);
+                    return;
+                }
+                
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = '';
+                
+                if (messages && messages.length > 0) {
+                    messages.forEach(message => {
+                        const messageElement = createMessageElement(message);
+                        container.appendChild(messageElement);
+                    });
+                    
+                    container.scrollTop = container.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Load messages error:', error);
+            }
+        }
+
+        function createMessageElement(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const timestamp = new Date(message.created_at).toLocaleTimeString();
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <img class="message-avatar" src="${message.avatar_url || ''}" alt="Avatar">
+                    <span class="message-username">${message.username}</span>
+                    <span class="message-timestamp">${timestamp}</span>
+                </div>
+                <div class="message-content">${message.content}</div>
+            `;
+            
+            return messageDiv;
+        }
+
+        async function sendMessage() {
+            if (!currentUser || !supabase) {
+                alert('Please login to send messages');
+                return;
+            }
+            
+            const input = document.getElementById('chatInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('chat_messages')
+                    .insert([
+                        {
+                            content: content,
+                            username: currentUser.user_metadata?.full_name || 'User',
+                            avatar_url: currentUser.user_metadata?.avatar_url || '',
+                            user_id: currentUser.id,
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                input.value = '';
+                loadMessages();
+            } catch (error) {
+                console.error('Send message error:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        }
+
+        // Modal functions
+        function openUpdateModal() {
+            if (!currentUser) {
+                alert('Please login to add updates');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD
