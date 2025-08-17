@@ -1,1 +1,1022 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SluGurMan - Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.7/supabase.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: transparent;
+        }
+
+        /* Auth Section */
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .login-btn {
+            background: #5865F2;
+            border: none;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Home Page Styles */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        /* Updates Section */
+        .updates-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .updates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .updates-title {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .add-update-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-update-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .add-update-btn:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .update-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4ecdc4;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .update-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .update-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Social Links */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .social-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .social-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chat Room Styles */
+        .chat-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .chat-message {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-avatar {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+
+        .message-username {
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .message-timestamp {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .message-content {
+            padding-left: 2rem;
+        }
+
+        .chat-input-section {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 3rem;
+            opacity: 0.7;
+        }
+
+        /* Modal for adding updates */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .modal textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">SluGurMan</div>
+                <div class="nav-section">
+                    <nav>
+                        <button class="nav-btn active" onclick="showPage('home')">Home</button>
+                        <button class="nav-btn" onclick="showPage('socials')">Socials</button>
+                        <button class="nav-btn" onclick="showPage('chat')">Chat</button>
+                        <a href="https://discord.gg/FQc3HN6mwh" class="nav-btn" target="_blank">Discord</a>
+                    </nav>
+                    <div class="auth-section">
+                        <div id="userInfo" class="user-info" style="display: none;">
+                            <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                            <span id="username"></span>
+                            <button class="logout-btn" onclick="logout()">Logout</button>
+                        </div>
+                        <button id="loginBtn" class="login-btn" onclick="loginWithDiscord()">
+                            🎮 Login with Discord
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Welcome to SluGurMan</h1>
+                <p>Content Creator | Streamer | Community Builder</p>
+            </div>
+            
+            <div class="updates-section">
+                <div class="updates-header">
+                    <h2 class="updates-title">Latest Updates</h2>
+                    <button id="addUpdateBtn" class="add-update-btn" onclick="openUpdateModal()" disabled>
+                        + Add Update (Owner Only)
+                    </button>
+                </div>
+                
+                <div id="updates-container">
+                    <!-- Default update -->
+                    <div class="update-item">
+                        <div class="update-date">January 15, 2024</div>
+                        <div class="update-content">Welcome to my new portfolio website! Thanks for checking it out. More updates coming soon!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Socials Page -->
+        <div id="socials" class="page">
+            <h1 class="page-title">Find Me Online</h1>
+            
+            <div class="social-grid">
+                <div class="social-card">
+                    <div class="social-icon">📺</div>
+                    <h3>Twitch</h3>
+                    <p>Watch me stream live!</p>
+                    <a href="https://twitch.tv/SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">🎵</div>
+                    <h3>TikTok</h3>
+                    <p>Short form content and highlights</p>
+                    <a href="https://tiktok.com/@SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">📸</div>
+                    <h3>Instagram</h3>
+                    <p>Behind the scenes content</p>
+                    <a href="https://instagram.com/SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">🎬</div>
+                    <h3>YouTube</h3>
+                    <p>Videos and highlights</p>
+                    <a href="https://youtube.com/@SluGurMan" class="social-link" target="_blank">@SluGurMan</a>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon">💬</div>
+                    <h3>Discord</h3>
+                    <p>Join the community!</p>
+                    <a href="https://discord.gg/FQc3HN6mwh" class="social-link" target="_blank">Join Server</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="chat" class="page">
+            <h1 class="page-title">Community Chat</h1>
+            
+            <div id="chatContainer" class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <!-- Messages will appear here -->
+                </div>
+                
+                <div id="chatInputSection" class="chat-input-section" style="display: none;">
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." maxlength="500">
+                        <button class="send-btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+                
+                <div id="loginRequired" class="login-required">
+                    <h3>Login Required</h3>
+                    <p>Please login with Discord to join the chat!</p>
+                    <button class="login-btn" onclick="loginWithDiscord()" style="margin-top: 1rem;">
+                        🎮 Login with Discord
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1rem; text-align: center;">Add New Update</h2>
+            <input type="text" id="updateTitle" placeholder="Update title (optional)">
+            <textarea id="updateContent" placeholder="What's new?"></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" onclick="closeUpdateModal()">Cancel</button>
+                <button class="modal-btn save-btn" onclick="saveUpdate()">Save Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        let supabase;
+        let currentUser = null;
+        
+        // REPLACE THESE WITH YOUR ACTUAL SUPABASE VALUES
+        const SUPABASE_URL = 'https://ccpyrrvicpklepidtilo.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjcHlycnZpY3BrbGVwaWR0aWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3OTI5NTcsImV4cCI6MjA3MDM2ODk1N30.BIsUcuDylm0x7DO32YJ87TuVm6oP2zysEQSCjM-X18s';
+        
+        // YOUR DISCORD USER ID (get from Discord Developer settings)
+        const OWNER_DISCORD_ID = '821445289477931069';
+
+        // Navigation functionality (back to simple working version)
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Remove active class from all nav buttons (only button elements, not links)
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                if (btn.tagName === 'BUTTON') {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active class to clicked nav button
+            event.target.classList.add('active');
+            
+            // Load messages if opening chat
+            if (pageId === 'chat') {
+                loadMessages();
+            }
+        }
+
+        // Initialize Supabase
+        function initSupabase() {
+            if (SUPABASE_URL === 'https://ccpyrrvicpklepidtilo.supabase.co') {
+                console.log('Supabase not configured yet');
+                return;
+            }
+            
+            try {
+                supabase = supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                checkAuthState();
+                loadUpdates();
+            } catch (error) {
+                console.error('Supabase initialization error:', error);
+            }
+        }
+
+        // Auth Functions
+        async function loginWithDiscord() {
+            if (!supabase) {
+                alert('Authentication service not configured');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'discord',
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+                
+                if (error) throw error;
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+
+        async function logout() {
+            if (!supabase) return;
+            
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                currentUser = null;
+                updateUI();
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        async function checkAuthState() {
+            if (!supabase) return;
+            
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                currentUser = user;
+                updateUI();
+                
+                // Listen for auth changes
+                supabase.auth.onAuthStateChange((event, session) => {
+                    currentUser = session?.user || null;
+                    updateUI();
+                    if (event === 'SIGNED_IN') {
+                        loadMessages();
+                    }
+                });
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        function updateUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const userInfo = document.getElementById('userInfo');
+            const addUpdateBtn = document.getElementById('addUpdateBtn');
+            const chatInputSection = document.getElementById('chatInputSection');
+            const loginRequired = document.getElementById('loginRequired');
+
+            if (currentUser) {
+                // User is logged in
+                loginBtn.style.display = 'none';
+                userInfo.style.display = 'flex';
+                
+                document.getElementById('userAvatar').src = currentUser.user_metadata?.avatar_url || '';
+                document.getElementById('username').textContent = currentUser.user_metadata?.full_name || 'User';
+                
+                // Check if user is owner
+                const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+                addUpdateBtn.disabled = !isOwner;
+                addUpdateBtn.textContent = isOwner ? '+ Add Update' : '+ Add Update (Owner Only)';
+                
+                // Show chat input
+                if (chatInputSection) {
+                    chatInputSection.style.display = 'block';
+                    loginRequired.style.display = 'none';
+                }
+            } else {
+                // User is not logged in
+                loginBtn.style.display = 'block';
+                userInfo.style.display = 'none';
+                addUpdateBtn.disabled = true;
+                addUpdateBtn.textContent = '+ Add Update (Owner Only)';
+                
+                // Hide chat input
+                if (chatInputSection) {
+                    chatInputSection.style.display = 'none';
+                    loginRequired.style.display = 'block';
+                }
+            }
+        }
+
+        // Update functionality
+        async function loadUpdates() {
+            if (!supabase) return;
+            
+            try {
+                const { data: updates, error } = await supabase
+                    .from('updates')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading updates:', error);
+                    return;
+                }
+                
+                const container = document.getElementById('updates-container');
+                
+                if (updates && updates.length > 0) {
+                    container.innerHTML = '';
+                    updates.forEach(update => {
+                        const updateElement = createUpdateElement(update.content, update.created_at);
+                        container.appendChild(updateElement);
+                    });
+                }
+                // Keep default update if no database updates
+                
+            } catch (error) {
+                console.error('Load updates error:', error);
+            }
+        }
+
+        function createUpdateElement(content, timestamp) {
+            const updateItem = document.createElement('div');
+            updateItem.className = 'update-item';
+            
+            const date = new Date(timestamp).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            updateItem.innerHTML = `
+                <div class="update-date">${date}</div>
+                <div class="update-content">${content}</div>
+            `;
+            
+            return updateItem;
+        }
+
+        async function saveUpdate() {
+            if (!currentUser || !supabase) {
+                alert('Please login to add updates');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add updates');
+                return;
+            }
+            
+            const content = document.getElementById('updateContent').value;
+            if (!content.trim()) {
+                alert('Please enter some content for your update!');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('updates')
+                    .insert([
+                        {
+                            content: content.trim(),
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                closeUpdateModal();
+                loadUpdates();
+            } catch (error) {
+                console.error('Save update error:', error);
+                alert('Failed to save update. Please try again.');
+            }
+        }
+
+        // Chat functionality
+        async function loadMessages() {
+            if (!supabase) return;
+            
+            try {
+                const { data: messages, error } = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .order('created_at', { ascending: true })
+                    .limit(50);
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading messages:', error);
+                    return;
+                }
+                
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = '';
+                
+                if (messages && messages.length > 0) {
+                    messages.forEach(message => {
+                        const messageElement = createMessageElement(message);
+                        container.appendChild(messageElement);
+                    });
+                    
+                    container.scrollTop = container.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Load messages error:', error);
+            }
+        }
+
+        function createMessageElement(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const timestamp = new Date(message.created_at).toLocaleTimeString();
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <img class="message-avatar" src="${message.avatar_url || ''}" alt="Avatar">
+                    <span class="message-username">${message.username}</span>
+                    <span class="message-timestamp">${timestamp}</span>
+                </div>
+                <div class="message-content">${message.content}</div>
+            `;
+            
+            return messageDiv;
+        }
+
+        async function sendMessage() {
+            if (!currentUser || !supabase) {
+                alert('Please login to send messages');
+                return;
+            }
+            
+            const input = document.getElementById('chatInput');
+            const content = input.value.trim();
+            
+            if (!content) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('chat_messages')
+                    .insert([
+                        {
+                            content: content,
+                            username: currentUser.user_metadata?.full_name || 'User',
+                            avatar_url: currentUser.user_metadata?.avatar_url || '',
+                            user_id: currentUser.id,
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                input.value = '';
+                loadMessages();
+            } catch (error) {
+                console.error('Send message error:', error);
+                alert('Failed to send message. Please try again.');
+            }
+        }
+
+        // Modal functions
+        function openUpdateModal() {
+            if (!currentUser) {
+                alert('Please login to add updates');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add updates');
+                return;
+            }
+            
+            document.getElementById('updateModal').style.display = 'block';
+        }
+
+        function closeUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+            document.getElementById('updateTitle').value = '';
+            document.getElementById('updateContent').value = '';
+        }
+
+        // Enter key listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('updateModal');
+            if (event.target === modal) {
+                closeUpdateModal();
+            }
+        }
+
+        // Initialize everything when page loads
+        window.onload = function() {
+            initSupabase();
+            updateUI(); // Update UI even if Supabase isn't configured
+        }
+    </script>
+</body>
+</html>
