@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -208,7 +207,7 @@
             background-clip: text;
         }
 
-        .add-update-btn {
+        .add-update-btn, .add-portfolio-btn {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             border: none;
             color: white;
@@ -219,12 +218,12 @@
             transition: all 0.3s ease;
         }
 
-        .add-update-btn:hover {
+        .add-update-btn:hover, .add-portfolio-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .add-update-btn:disabled {
+        .add-update-btn:disabled, .add-portfolio-btn:disabled {
             background: rgba(255, 255, 255, 0.3);
             cursor: not-allowed;
             transform: none;
@@ -249,6 +248,101 @@
         .update-content {
             font-size: 1.1rem;
             line-height: 1.6;
+        }
+
+        /* Portfolio Styles */
+        .portfolio-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            animation: slideInUp 0.5s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .portfolio-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .portfolio-category {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         /* Social Links */
@@ -395,7 +489,7 @@
             opacity: 0.7;
         }
 
-        /* Modal for adding updates */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -416,10 +510,12 @@
             padding: 2rem;
             border-radius: 15px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .modal input, .modal textarea {
+        .modal input, .modal textarea, .modal select {
             width: 100%;
             padding: 1rem;
             margin: 0.5rem 0;
@@ -460,6 +556,68 @@
             color: white;
         }
 
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .file-input-wrapper input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        /* Auth Status */
+        .auth-status {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .status-error {
+            color: #ff6b6b;
+        }
+
+        .status-success {
+            color: #4ecdc4;
+        }
+
+        .debug-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -480,6 +638,17 @@
             to {
                 opacity: 1;
                 transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -510,6 +679,15 @@
             .chat-input-container {
                 flex-direction: column;
             }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .updates-header, .portfolio-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -521,6 +699,7 @@
                 <div class="nav-section">
                     <nav>
                         <button class="nav-btn active" onclick="showPage('home')">Home</button>
+                        <button class="nav-btn" onclick="showPage('portfolio')">Portfolio</button>
                         <button class="nav-btn" onclick="showPage('socials')">Socials</button>
                         <button class="nav-btn" onclick="showPage('chat')">Chat</button>
                         <a href="https://discord.gg/FQc3HN6mwh" class="nav-btn" target="_blank">Discord</a>
@@ -548,6 +727,14 @@
                 <p>Content Creator | Streamer | Community Builder</p>
             </div>
             
+            <!-- Auth Status -->
+            <div class="auth-status">
+                <h3>Authentication Status</h3>
+                <div id="authStatusText" class="status-error">Checking authentication...</div>
+                <div id="debugInfo" class="debug-info" style="display: none;"></div>
+                <button onclick="toggleDebug()">Toggle Debug Info</button>
+            </div>
+            
             <div class="updates-section">
                 <div class="updates-header">
                     <h2 class="updates-title">Latest Updates</h2>
@@ -561,6 +748,32 @@
                     <div class="update-item">
                         <div class="update-date">January 15, 2024</div>
                         <div class="update-content">Welcome to my new portfolio website! Thanks for checking it out. More updates coming soon!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Page -->
+        <div id="portfolio" class="page">
+            <h1 class="page-title">My Work</h1>
+            
+            <div class="portfolio-section">
+                <div class="portfolio-header">
+                    <h2 class="updates-title">My Projects & Achievements</h2>
+                    <button id="addPortfolioBtn" class="add-portfolio-btn" onclick="openPortfolioModal()" disabled>
+                        + Add Project (Owner Only)
+                    </button>
+                </div>
+                
+                <div id="portfolio-container" class="portfolio-grid">
+                    <!-- Default portfolio item -->
+                    <div class="portfolio-item">
+                        <div class="portfolio-category">Streaming</div>
+                        <h3 class="portfolio-title">Content Creation</h3>
+                        <p class="portfolio-description">Building a community through streaming, engaging content, and interactive experiences across multiple platforms.</p>
+                        <div class="portfolio-links">
+                            <a href="https://twitch.tv/SluGurMan" class="portfolio-link" target="_blank">View Stream</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -648,6 +861,24 @@
         </div>
     </div>
 
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1rem; text-align: center;">Add New Portfolio Item</h2>
+            
+            <div class="form-group">
+                <label>Links (optional)</label>
+                <input type="text" id="portfolioLink1" placeholder="Primary link (e.g., project URL, stream link)">
+                <input type="text" id="portfolioLink2" placeholder="Secondary link (optional)">
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" onclick="closePortfolioModal()">Cancel</button>
+                <button class="modal-btn save-btn" onclick="savePortfolioItem()">Save Project</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Supabase Configuration
         let supabase;
@@ -660,7 +891,30 @@
         // YOUR DISCORD USER ID (get from Discord Developer settings)
         const OWNER_DISCORD_ID = '821445289477931069';
 
-        // Navigation functionality (back to simple working version)
+        // Debug function
+        function toggleDebug() {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateDebugInfo(info) {
+            const debugElement = document.getElementById('debugInfo');
+            debugElement.innerHTML = `
+                <strong>Supabase URL:</strong> ${SUPABASE_URL}<br>
+                <strong>Supabase Key:</strong> ${SUPABASE_ANON_KEY ? 'Set' : 'Not set'}<br>
+                <strong>Owner Discord ID:</strong> ${OWNER_DISCORD_ID}<br>
+                <strong>Current User:</strong> ${currentUser ? JSON.stringify(currentUser.user_metadata) : 'None'}<br>
+                <strong>Additional Info:</strong> ${info || 'None'}
+            `;
+        }
+
+        function updateAuthStatus(message, isError = false) {
+            const statusElement = document.getElementById('authStatusText');
+            statusElement.textContent = message;
+            statusElement.className = isError ? 'status-error' : 'status-success';
+        }
+
+        // Navigation functionality
         function showPage(pageId) {
             // Hide all pages
             const pages = document.querySelectorAll('.page');
@@ -678,38 +932,51 @@
             document.getElementById(pageId).classList.add('active');
             
             // Add active class to clicked nav button
-            event.target.classList.add('active');
+            if (event && event.target && event.target.tagName === 'BUTTON') {
+                event.target.classList.add('active');
+            }
             
-            // Load messages if opening chat
+            // Load content based on page
             if (pageId === 'chat') {
                 loadMessages();
+            } else if (pageId === 'portfolio') {
+                loadPortfolioItems();
             }
         }
 
         // Initialize Supabase
         function initSupabase() {
-            if (SUPABASE_URL === 'https://ccpyrrvicpklepidtilo.supabase.co') {
-                console.log('Supabase not configured yet');
-                return;
-            }
-            
             try {
+                if (typeof supabaseClient === 'undefined') {
+                    updateAuthStatus('Supabase library not loaded', true);
+                    updateDebugInfo('Supabase client not available');
+                    return false;
+                }
+
                 supabase = supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                updateAuthStatus('Supabase initialized, checking auth...');
+                updateDebugInfo('Supabase client created successfully');
+                
                 checkAuthState();
                 loadUpdates();
+                return true;
             } catch (error) {
                 console.error('Supabase initialization error:', error);
+                updateAuthStatus(`Supabase init failed: ${error.message}`, true);
+                updateDebugInfo(`Error: ${error.message}`);
+                return false;
             }
         }
 
         // Auth Functions
         async function loginWithDiscord() {
             if (!supabase) {
-                alert('Authentication service not configured');
+                updateAuthStatus('Authentication service not configured', true);
                 return;
             }
             
             try {
+                updateAuthStatus('Attempting Discord login...');
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'discord',
                     options: {
@@ -718,9 +985,11 @@
                 });
                 
                 if (error) throw error;
+                updateAuthStatus('Redirecting to Discord...');
             } catch (error) {
                 console.error('Login error:', error);
-                alert('Login failed. Please try again.');
+                updateAuthStatus(`Login failed: ${error.message}`, true);
+                updateDebugInfo(`Login error: ${error.message}`);
             }
         }
 
@@ -733,8 +1002,10 @@
                 
                 currentUser = null;
                 updateUI();
+                updateAuthStatus('Logged out successfully');
             } catch (error) {
                 console.error('Logout error:', error);
+                updateAuthStatus(`Logout failed: ${error.message}`, true);
             }
         }
 
@@ -742,20 +1013,38 @@
             if (!supabase) return;
             
             try {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (error) throw error;
+                
                 currentUser = user;
                 updateUI();
                 
+                if (user) {
+                    updateAuthStatus(`Logged in as ${user.user_metadata?.full_name || 'User'}`);
+                    updateDebugInfo(`User authenticated. Provider ID: ${user.user_metadata?.provider_id}`);
+                } else {
+                    updateAuthStatus('Not logged in');
+                    updateDebugInfo('No authenticated user');
+                }
+                
                 // Listen for auth changes
                 supabase.auth.onAuthStateChange((event, session) => {
+                    console.log('Auth state changed:', event, session);
                     currentUser = session?.user || null;
                     updateUI();
-                    if (event === 'SIGNED_IN') {
+                    
+                    if (event === 'SIGNED_IN' && session?.user) {
+                        updateAuthStatus(`Logged in as ${session.user.user_metadata?.full_name || 'User'}`);
                         loadMessages();
+                    } else if (event === 'SIGNED_OUT') {
+                        updateAuthStatus('Logged out');
                     }
                 });
+                
             } catch (error) {
                 console.error('Auth check error:', error);
+                updateAuthStatus(`Auth check failed: ${error.message}`, true);
+                updateDebugInfo(`Auth error: ${error.message}`);
             }
         }
 
@@ -763,6 +1052,7 @@
             const loginBtn = document.getElementById('loginBtn');
             const userInfo = document.getElementById('userInfo');
             const addUpdateBtn = document.getElementById('addUpdateBtn');
+            const addPortfolioBtn = document.getElementById('addPortfolioBtn');
             const chatInputSection = document.getElementById('chatInputSection');
             const loginRequired = document.getElementById('loginRequired');
 
@@ -776,11 +1066,19 @@
                 
                 // Check if user is owner
                 const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
-                addUpdateBtn.disabled = !isOwner;
-                addUpdateBtn.textContent = isOwner ? '+ Add Update' : '+ Add Update (Owner Only)';
+                
+                if (addUpdateBtn) {
+                    addUpdateBtn.disabled = !isOwner;
+                    addUpdateBtn.textContent = isOwner ? '+ Add Update' : '+ Add Update (Owner Only)';
+                }
+                
+                if (addPortfolioBtn) {
+                    addPortfolioBtn.disabled = !isOwner;
+                    addPortfolioBtn.textContent = isOwner ? '+ Add Project' : '+ Add Project (Owner Only)';
+                }
                 
                 // Show chat input
-                if (chatInputSection) {
+                if (chatInputSection && loginRequired) {
                     chatInputSection.style.display = 'block';
                     loginRequired.style.display = 'none';
                 }
@@ -788,11 +1086,19 @@
                 // User is not logged in
                 loginBtn.style.display = 'block';
                 userInfo.style.display = 'none';
-                addUpdateBtn.disabled = true;
-                addUpdateBtn.textContent = '+ Add Update (Owner Only)';
+                
+                if (addUpdateBtn) {
+                    addUpdateBtn.disabled = true;
+                    addUpdateBtn.textContent = '+ Add Update (Owner Only)';
+                }
+                
+                if (addPortfolioBtn) {
+                    addPortfolioBtn.disabled = true;
+                    addPortfolioBtn.textContent = '+ Add Project (Owner Only)';
+                }
                 
                 // Hide chat input
-                if (chatInputSection) {
+                if (chatInputSection && loginRequired) {
                     chatInputSection.style.display = 'none';
                     loginRequired.style.display = 'block';
                 }
@@ -817,13 +1123,13 @@
                 const container = document.getElementById('updates-container');
                 
                 if (updates && updates.length > 0) {
+                    // Clear default update and add database updates
                     container.innerHTML = '';
                     updates.forEach(update => {
                         const updateElement = createUpdateElement(update.content, update.created_at);
                         container.appendChild(updateElement);
                     });
                 }
-                // Keep default update if no database updates
                 
             } catch (error) {
                 console.error('Load updates error:', error);
@@ -882,7 +1188,133 @@
                 loadUpdates();
             } catch (error) {
                 console.error('Save update error:', error);
-                alert('Failed to save update. Please try again.');
+                alert(`Failed to save update: ${error.message}`);
+            }
+        }
+
+        // Portfolio functionality
+        async function loadPortfolioItems() {
+            if (!supabase) return;
+            
+            try {
+                const { data: items, error } = await supabase
+                    .from('portfolio_items')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Error loading portfolio items:', error);
+                    return;
+                }
+                
+                const container = document.getElementById('portfolio-container');
+                
+                if (items && items.length > 0) {
+                    // Keep the default item and add database items
+                    const defaultItem = container.querySelector('.portfolio-item');
+                    container.innerHTML = '';
+                    if (defaultItem) {
+                        container.appendChild(defaultItem);
+                    }
+                    
+                    items.forEach(item => {
+                        const itemElement = createPortfolioElement(item);
+                        container.appendChild(itemElement);
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Load portfolio items error:', error);
+            }
+        }
+
+        function createPortfolioElement(item) {
+            const portfolioItem = document.createElement('div');
+            portfolioItem.className = 'portfolio-item';
+            
+            let imageHTML = '';
+            if (item.image_url) {
+                imageHTML = `<img src="${item.image_url}" alt="${item.title}" class="portfolio-image">`;
+            }
+            
+            let linksHTML = '';
+            if (item.links && item.links.length > 0) {
+                linksHTML = '<div class="portfolio-links">';
+                item.links.forEach(link => {
+                    if (link.url) {
+                        linksHTML += `<a href="${link.url}" class="portfolio-link" target="_blank">${link.label || 'View'}</a>`;
+                    }
+                });
+                linksHTML += '</div>';
+            }
+            
+            portfolioItem.innerHTML = `
+                ${imageHTML}
+                <div class="portfolio-category">${item.category}</div>
+                <h3 class="portfolio-title">${item.title}</h3>
+                <p class="portfolio-description">${item.description}</p>
+                ${linksHTML}
+            `;
+            
+            return portfolioItem;
+        }
+
+        async function savePortfolioItem() {
+            if (!currentUser || !supabase) {
+                alert('Please login to add portfolio items');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add portfolio items');
+                return;
+            }
+            
+            const title = document.getElementById('portfolioTitle').value.trim();
+            const category = document.getElementById('portfolioCategory').value;
+            const description = document.getElementById('portfolioDescription').value.trim();
+            const link1 = document.getElementById('portfolioLink1').value.trim();
+            const link2 = document.getElementById('portfolioLink2').value.trim();
+            
+            if (!title || !category || !description) {
+                alert('Please fill in all required fields (Title, Category, Description)');
+                return;
+            }
+            
+            // Prepare links array
+            const links = [];
+            if (link1) links.push({ url: link1, label: 'View Project' });
+            if (link2) links.push({ url: link2, label: 'Additional Link' });
+            
+            try {
+                const portfolioData = {
+                    title,
+                    category,
+                    description,
+                    links,
+                    created_at: new Date().toISOString()
+                };
+                
+                // Handle image upload if present
+                const imageFile = document.getElementById('portfolioImage').files[0];
+                if (imageFile) {
+                    // For now, we'll skip image upload and just store the data
+                    // In a full implementation, you'd upload to Supabase Storage
+                    console.log('Image upload not implemented yet');
+                }
+                
+                const { data, error } = await supabase
+                    .from('portfolio_items')
+                    .insert([portfolioData]);
+                
+                if (error) throw error;
+                
+                closePortfolioModal();
+                loadPortfolioItems();
+            } catch (error) {
+                console.error('Save portfolio item error:', error);
+                alert(`Failed to save portfolio item: ${error.message}`);
             }
         }
 
@@ -912,6 +1344,8 @@
                     });
                     
                     container.scrollTop = container.scrollHeight;
+                } else {
+                    container.innerHTML = '<div style="text-align: center; opacity: 0.7; padding: 2rem;">No messages yet. Be the first to say something!</div>';
                 }
             } catch (error) {
                 console.error('Load messages error:', error);
@@ -966,7 +1400,7 @@
                 loadMessages();
             } catch (error) {
                 console.error('Send message error:', error);
-                alert('Failed to send message. Please try again.');
+                alert(`Failed to send message: ${error.message}`);
             }
         }
 
@@ -992,6 +1426,31 @@
             document.getElementById('updateContent').value = '';
         }
 
+        function openPortfolioModal() {
+            if (!currentUser) {
+                alert('Please login to add portfolio items');
+                return;
+            }
+            
+            const isOwner = currentUser.user_metadata?.provider_id === OWNER_DISCORD_ID;
+            if (!isOwner) {
+                alert('Only the owner can add portfolio items');
+                return;
+            }
+            
+            document.getElementById('portfolioModal').style.display = 'block';
+        }
+
+        function closePortfolioModal() {
+            document.getElementById('portfolioModal').style.display = 'none';
+            document.getElementById('portfolioTitle').value = '';
+            document.getElementById('portfolioCategory').value = '';
+            document.getElementById('portfolioDescription').value = '';
+            document.getElementById('portfolioLink1').value = '';
+            document.getElementById('portfolioLink2').value = '';
+            document.getElementById('portfolioImage').value = '';
+        }
+
         // Enter key listeners
         document.addEventListener('DOMContentLoaded', function() {
             const chatInput = document.getElementById('chatInput');
@@ -1006,17 +1465,59 @@
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('updateModal');
-            if (event.target === modal) {
+            const updateModal = document.getElementById('updateModal');
+            const portfolioModal = document.getElementById('portfolioModal');
+            
+            if (event.target === updateModal) {
                 closeUpdateModal();
+            }
+            if (event.target === portfolioModal) {
+                closePortfolioModal();
             }
         }
 
         // Initialize everything when page loads
         window.onload = function() {
-            initSupabase();
-            updateUI(); // Update UI even if Supabase isn't configured
+            updateAuthStatus('Initializing...');
+            const success = initSupabase();
+            if (!success) {
+                updateAuthStatus('Please check Supabase configuration', true);
+            }
+            updateUI();
         }
     </script>
 </body>
 </html>
+                <label>Project Title *</label>
+                <input type="text" id="portfolioTitle" placeholder="Enter project title" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Category *</label>
+                <select id="portfolioCategory" required>
+                    <option value="">Select a category</option>
+                    <option value="Streaming">Streaming</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Content Creation">Content Creation</option>
+                    <option value="Community">Community</option>
+                    <option value="Collaboration">Collaboration</option>
+                    <option value="Achievement">Achievement</option>
+                    <option value="Project">Project</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea id="portfolioDescription" placeholder="Describe your project/achievement" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Image (optional)</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="portfolioImage" accept="image/*">
+                    <span>Click to upload an image or drag and drop</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
